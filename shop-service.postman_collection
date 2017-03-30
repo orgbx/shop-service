@@ -1,0 +1,351 @@
+{
+	"variables": [],
+	"info": {
+		"name": "shop-service",
+		"_postman_id": "7103334d-4ed3-74b3-ab1f-2889571bf112",
+		"description": "A collection to test Shop API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all shops (Empty)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Content-Type is present\"] = postman.getResponseHeader(\"Content-Type\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/shops",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add shop without address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error message is descriptive\"] = jsonData.error === \"Shop.shopAddress expected\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/shops",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"devnull shop\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add London shop",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;",
+							"tests[\"Resource location is present\"] = postman.getResponseHeader(\"location\") === \"http://localhost:8080/shops/London%20shop\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/shops",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"London shop\",\n\t\"shopAddress\" : {\n\t\t\"number\": \"1\",\n\t\t\"postCode\": \"EC4V 4BQ\"\n\t}\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get London shop",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Version 0 received\"] = jsonData.version === 0;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/shops/London%20shop",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"1\",\n\t\"shopAddress\" : {\n\t\t\"number\": \"1\",\n\t\t\"postCode\": \"WC2E 8HD\"\n\t}\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get all shops (shops available)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Content-Type is present\"] = postman.getResponseHeader(\"Content-Type\");",
+							"",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Returns 1 shop\"] = jsonData._embedded.shopEntityList.length === 1 ;",
+							"tests[\"HAL self link to list\"] = jsonData._links.self.href === \"http://localhost:8080/shops\" ;",
+							"tests[\"HAL self link to each resource\"] = jsonData._embedded.shopEntityList[0]._links.self.href === \"http://localhost:8080/shops/London%20shop\" ;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/shops",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Update London shop",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Resource location is present\"] = postman.getResponseHeader(\"location\") === \"http://localhost:8080/shops/London%20shop\";",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Version 0 received\"] = jsonData.version === 0;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/shops",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"London shop\",\n\t\"shopAddress\" : {\n\t\t\"number\": \"1 updated\",\n\t\t\"postCode\": \"EC4V 4BQ\"\n\t}\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add Edinburgh shop",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;",
+							"tests[\"Resource location is present\"] = postman.getResponseHeader(\"location\") === \"http://localhost:8080/shops/Edinburgh%20shop\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/shops",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Edinburgh shop\",\n\t\"shopAddress\" : {\n\t\t\"number\": \"2\",\n\t\t\"postCode\": \"EH5 3BH\"\n\t}\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add Liverpool shop",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;",
+							"tests[\"Resource location is present\"] = postman.getResponseHeader(\"location\") === \"http://localhost:8080/shops/Liverpool%20shop\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/shops",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Liverpool shop\",\n\t\"shopAddress\" : {\n\t\t\"number\": \"1\",\n\t\t\"postCode\": \"L32 8SJ\"\n\t}\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get London shop (should have coordinates)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Version 1 received\"] = jsonData.version === 1;",
+							"tests[\"Has coordinates\"] = jsonData.shopAddress.longitude && jsonData.shopAddress.latitude;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/shops/London%20shop",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"1\",\n\t\"shopAddress\" : {\n\t\t\"number\": \"1\",\n\t\t\"postCode\": \"WC2E 8HD\"\n\t}\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get closest shop to Edinburgh",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Edinburgh shop received\"] = jsonData.name === \"Edinburgh shop\";",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/shops?lat=55.959736&lng=-2.789885",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get closest shop to Brighton",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"London shop received\"] = jsonData.name === \"London shop\";",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/shops?lat=50.8375077&lng=-0.1764013",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
