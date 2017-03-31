@@ -13,6 +13,8 @@ The project expects Java 8 and gradle to be installed.
 ```sh
 ./gradlew bootRun # use 'gradlew.bat bootRun' on Windows
 ```
+The project uses [Lombok](https://projectlombok.org/) and works fine from command line 
+but IDEs need some assistance to know about it. [Check how to setup your favourite IDE](https://projectlombok.org/download.html) to support _Lombok_. 
 
 #### Distributing the Service
 

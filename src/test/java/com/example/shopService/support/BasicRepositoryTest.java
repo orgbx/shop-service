@@ -32,6 +32,7 @@ public class BasicRepositoryTest {
     }
 
     class VersionableDocument extends Versionable {
+        private static final long serialVersionUID = -3801321484887482586L;
         final String description;
 
         VersionableDocument(String description) {

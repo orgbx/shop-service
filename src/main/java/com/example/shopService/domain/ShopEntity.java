@@ -8,8 +8,9 @@ import java.io.Serializable;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ShopEntity extends Versionable implements Serializable {
+public class ShopEntity extends Versionable{
 
+    private static final long serialVersionUID = 2936035955409046843L;
     private String name;
     private ShopAddress shopAddress;
 
@@ -25,6 +26,7 @@ public class ShopEntity extends Versionable implements Serializable {
 
     @Data
     public static class ShopAddress implements Serializable {
+        private static final long serialVersionUID = 6210366512436661558L;
         private String number;
         private String postCode;
         private Double longitude;
