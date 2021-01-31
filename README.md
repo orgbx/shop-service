@@ -1,3 +1,6 @@
+| Archived 🗂:  This was an old code challenge for a job interview |
+| --- |
+
 # Shop Service
 
 A basic RESTful(ish) API for a SHOP resource.
